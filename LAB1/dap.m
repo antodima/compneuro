@@ -3,7 +3,7 @@
 a=1; b=0.2; c=-60; d=-21;
 u=-70; w=b*u;
 us=[]; ws=[]; dus=[]; dws=[]
-tau=0.1; tspan=0:tau:50;
+tau=0.25; tspan=0:tau:50;
 T1=10;
 
 for t=tspan
