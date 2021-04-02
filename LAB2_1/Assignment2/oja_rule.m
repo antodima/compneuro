@@ -2,11 +2,11 @@
 
 U = csvread('../lab2_1_data.csv');  % load the dataset
 W = -1 + (1+1)*rand(2,1);
-Q = U' * U; % correlation matrix of the input
+Q = U * U'; % correlation matrix of the input
 n_epochs = 1000;
-lr = 10e-7;
-alpha = 10e-5;
-delta_norm_thr = 10e-6;
+lr = 10e-6;
+alpha = 10e-4;
+delta_norm_thr = 10e-10;
 norm_w = norm(W);
 Ws = [];    % weights during time
 Wn = [];    % weights norms
@@ -29,7 +29,7 @@ for t=1:n_epochs
     norm_w = norm_w_new;
     Wn(end+1) = norm_w;
     
-    fprintf('Epoch %d/%d, |W|=%5.4f, delta norm=%5.5f, norm thr=%5.5f, 1/α=%0.5f \n',t,n_epochs,norm_w,delta_norm,delta_norm_thr,(1/alpha));
+    fprintf('Epoch %d/%d, |W|=%5.10f, delta norm=%5.10f, norm thr=%5.10f, 1/α=%0.5f \n',t,n_epochs,norm_w,delta_norm,delta_norm_thr,(1/alpha));
     
     if delta_norm <= delta_norm_thr
         fprintf('Reached threshold! \n');
@@ -39,7 +39,7 @@ end;
 
 % P1)
 [V,D] = eig(Q);
-[d,ind] = sort(diag(D));
+[d,ind] = sort(diag(D),'descend');
 V = V(:,ind);
 eigvec = V(:,1);
 
@@ -48,7 +48,7 @@ scatter(U(1,:), U(2,:));
 hold on;
 plotv(eigvec);
 set(findall(gca,'Type', 'Line'),'LineWidth',1.75);
-plotv(W);
+plotv(W/norm(W));
 hold off;
 legend('Data points','Principal eigenvector','Weight vector');
 print(fig,'images/points_eigvect_weights.png','-dpng');
@@ -75,4 +75,4 @@ ylabel('weights norm');
 title('Evolution in time of the weights norm');
 print(fig,'images/weights_norms.png','-dpng');
 
-save('W.mat','Ws');
+save('Weights.mat','Ws');
