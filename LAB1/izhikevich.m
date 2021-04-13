@@ -28,18 +28,20 @@ end
 
 % Izhikevich equations
 if variant==0  % baseline equations of almost all neurons
-    du = tau * (0.04*u^2 + 5*u + 140 - w + I);
-    dw = tau * a*(b*u - w);
+    du = (0.04*u^2 + 5*u + 140 - w + I);
+    dw = a*(b*u - w);
+    u = u + tau * (0.04*u^2 + 5*u + 140 - w + I);
+    w = w + tau * a*(b*u - w);
 elseif variant==1  % variant of equations for neurons: (G) and (L)
-    du = tau * (0.04*u^2 + 4.1*u + 108 - w + I);
-    dw = tau * a*(b*u - w);
+    du = (0.04*u^2 + 4.1*u + 108 - w + I);
+    dw = a*(b*u - w);
+    u = u + tau * (0.04*u^2 + 4.1*u + 108 - w + I);
+    w = w + tau * a*(b*u - w);
 elseif variant==2  % variant of equations for neuron (R)
-    du = tau * (0.04*u^2 + 5*u + 140 - w + I);
-    dw = tau * a*(b*(u+65));
+    du = (0.04*u^2 + 5*u + 140 - w + I);
+    dw = a*(b*(u+65));
+    u = u + tau * (0.04*u^2 + 5*u + 140 - w + I);
+    w = w + tau * a*(b*(u+65));
 end
-
-% updating of variables
-u = u + du;
-w = w + dw;
 
 end  %end of function

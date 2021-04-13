@@ -1,6 +1,6 @@
 % (T) inhibition induced bursting
 
-a=-0.026; b=-1; c=-45; d=-0.7;  % d=-0.7 instead of d=-2
+a=-0.026; b=-1; c=-45; d=-2;
 u=-63.8; w=b*u;
 us=[]; ws=[]; dus=[]; dws=[]
 tau=0.5; tspan=0:tau:350;
