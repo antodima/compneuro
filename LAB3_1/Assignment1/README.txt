@@ -1,2 +1,2 @@
-IDNN MSEs: training error=0.00480, validation error=0.00478, test error=0.00458
-RNN MSEs: training error=0.00518, validation error=0.00558, test error=0.00479
+IDNN MSEs: training error=0.00476, validation error=0.00473, test error=0.00442
+RNN MSEs: training error=0.00499, validation error=0.00556, test error=0.00490
