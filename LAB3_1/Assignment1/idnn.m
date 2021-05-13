@@ -37,6 +37,7 @@ if isModelSelection
     infos = [];
     infoFieldnames = [];
     valErrors = [];
+    trErrors = [];
 
     for g=1:size(grid,1)
         params = grid(g,:);
@@ -65,39 +66,43 @@ if isModelSelection
         err = immse(cell2mat(y_train),cell2mat(y_pred));
         val_err = immse(cell2mat(y_val),cell2mat(y_val_pred));
         valErrors(end+1) = val_err;
+        trErrors(end+1) = err;
         
         fprintf('#%d/%d: delays=%d, hiddenSize=%d, epochs=%d, lr=%0.3f, lambda=%0.3f, tr.err=%0.5f, val.err=%0.5f \n',g,size(grid,1),delay,hiddenSize,epochs,lr,lambda,err,val_err);
     end
-    [val, idx] = min(valErrors);
+    [val_err, idx] = min(valErrors);
+    tr_err = trErrors(idx);
     infoCell = infos(:,idx);
     info = cell2struct(infoCell, infoFieldnames);
-    fprintf('min.val.err.=%0.5f, idx=%d, params={delays=%d, hiddenSize=%d, epochs=%d, lr=%0.3f, lambda=%0.3f} \n',val,idx,grid(idx,:));
+    fprintf('Best params: tr.err=%0.5f, val.err=%0.5f, idx=%d, params={delays=%d, hiddenSize=%d, epochs=%d, lr=%0.3f, lambda=%0.3f} \n',tr_err,val_err,idx,grid(idx,:));
     plotperform(info);
 else
     disp('>> Model assessment...');
-    % min.val.err.=0.00477, idx=391, params={delays=2, hiddenSize=10, epochs=90, lr=0.100, lambda=0.100} 
+    % Best params: tr.err=0.00478, val.err=0.00484, idx=391, params={delays=2, hiddenSize=10, epochs=90, lr=0.100, lambda=0.100} 
     net = timedelaynet(0:2,10,'traingdx');
-    net.performParam.regularization = 0.100;
+    net.performParam.regularization = 0.1;
     net.trainParam.epochs = 90;
     net.divideFcn = 'dividetrain';
     net.trainParam.lr = 0.1;
     net.trainParam.showWindow = false;
     [Xs,Xi,Ai,Ts] = preparets(net,X_design,y_design);
     [net,info] = train(net,Xs,Ts,'useParallel','yes');
-    plotperform(info);
+    %plotperform(info);
     
+    ds_pred = net(X_design);
     tr_pred = net(X_train);
     vl_pred = net(X_val);
     ts_pred = net(X_test);
     
-    tr_err = immse( cell2mat(y_train), cell2mat(tr_pred) );
-    vl_err = immse( cell2mat(y_val)  , cell2mat(vl_pred) );
-    ts_err = immse( cell2mat(y_test) , cell2mat(ts_pred) );
+    ds_err = immse( cell2mat(y_design), cell2mat(ds_pred) );
+    tr_err = immse( cell2mat(y_train), cell2mat(tr_pred)  );
+    vl_err = immse( cell2mat(y_val)  , cell2mat(vl_pred)  );
+    ts_err = immse( cell2mat(y_test) , cell2mat(ts_pred)  );
     
     fig = figure;
-    scatter((1:size(y_train,2)),cell2mat(y_train));
+    scatter((1:size(y_design,2)),cell2mat(y_design));
     hold on;
-    scatter((1:size(tr_pred,2)),cell2mat(tr_pred));
+    scatter((1:size(ds_pred,2)),cell2mat(ds_pred));
     xlabel('time')
     ylabel('target');
     title('Training targets and predictions');

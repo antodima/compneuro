@@ -8,6 +8,6 @@ Echo State Network best hyper-parameters:
     - Number of guesses = 10
 
  Mean Squared Errors:
-    - Training MSE = 0.00106
-    - Validation MSE = 0.00111
-    - Test MSE = 0.00097
+    - Training MSE = 0.00092
+    - Validation MSE = 0.00242
+    - Test MSE = 0.00118

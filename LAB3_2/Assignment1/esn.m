@@ -127,6 +127,7 @@ else
     D = y_design(:,Nh+1:end);
     % train the readout
     V = D*H'*inv(H*H'+lambda*eye(Nh+1)); % solve the linear system (Nh+1 for the bias)
+    Y = V * H;
     
     % compute training error
     H_tr = [];
@@ -175,9 +176,9 @@ else
     fprintf('tr_err=%0.5f, vl_err=%0.5f, ts_err=%0.5f \n',tr_err,vl_err,ts_err);
     
     fig = figure;
-    scatter((1:size(y_train,2)),y_train);
+    scatter((1:size(y_design(:,Nh+1:end),2)),y_design(:,Nh+1:end));
     hold on;
-    scatter((1:size(Y_tr,2)),Y_tr);
+    scatter((1:size(Y,2)),Y);
     xlabel('time')
     ylabel('target');
     title('Training targets and predictions');
