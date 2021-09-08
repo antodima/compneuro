@@ -1,4 +1,6 @@
 # compneuro
+Project of [Computational Neuroscience](https://esami.unipi.it/esami2/programma.php?c=35622) course @ [Department of Computer Science](https://di.unipi.it/en/?start=25) of [University of Pisa](https://unipi.it)
+
 
 1. [Izhikevich model](https://github.com/antodima/compneuro/tree/main/LAB1)
 2. [Hebbian learning](https://github.com/antodima/compneuro/tree/main/LAB2_1)
